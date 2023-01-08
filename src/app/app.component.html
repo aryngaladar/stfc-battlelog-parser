@@ -11,10 +11,9 @@
       <tr>
 		<th>Ship</th>
 		<th>Hostile</th>
-		<th>Captain Maneuver</th>
-		<th>Officer One Ability</th>
-		<th>Officer Two Ability</th>
-		<th>Officer Three Ability</th>
+		<th>Captain</th>
+		<th>Officer</th>
+		<th>Officer</th>
 	
 		<th>Estimated Kills Possible</th>
 		<th>Number of Logs</th>
@@ -30,17 +29,14 @@
           <span>{{bSum.hostile}} {{bSum.hostileLevel}}</span>
         </td>
         <td>
-          <span>{{bSum.captainManeuver}}</span>
+          <span>{{bSum.captain}}</span>
         </td>
-        <td>
-          <span>{{bSum.officerOneAbility}}</span>
-        </td>
-        <td>
-          <span>{{bSum.officerTwoAbility}}</span>
-        </td>
-        <td>
-          <span>{{bSum.officerThreeAbility}}</span>
-        </td>
+		<td>
+		  <span>{{bSum.officerOne}}</span>
+		</td>
+		<td>
+		  <span>{{bSum.officerTwo}}</span>
+		</td>
 		<td>
 		  <span *ngIf="bSum.success">{{bSum.totalHull / (bSum.totalHullDamage / bSum.numberOfLogs) | number: '1.0-1'}}</span>
 		  <span *ngIf="!bSum.success">0</span>

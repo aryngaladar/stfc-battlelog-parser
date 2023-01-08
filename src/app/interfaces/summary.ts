@@ -3,10 +3,9 @@ export interface BattleSummary {
     ship: string;
     hostile: string;
     hostileLevel: number;
-    captainManeuver: string;
-    officerOneAbility: string;
-    officerTwoAbility: string;
-    officerThreeAbility: string;
+    captain: string;
+    officerOne: string;
+    officerTwo: string;
 
 	success?: boolean;
 

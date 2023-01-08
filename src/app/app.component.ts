@@ -6,6 +6,7 @@ import { Observable, Observer } from 'rxjs';
 import { ParseSummary } from './interfaces/parsing';
 import { BattleSummary } from './interfaces/summary';
 import { ToastrService } from 'ngx-toastr';
+import { OfficerLookup } from './officer-lookup';
 
 @Component({
     selector: 'app-root',
@@ -15,7 +16,10 @@ import { ToastrService } from 'ngx-toastr';
 export class AppComponent {
 	battleSummaries: BattleSummary[] = [];
 
-    constructor(private ngxCsvParser: NgxCsvParser, private toastr: ToastrService) {}
+    constructor(private ngxCsvParser: NgxCsvParser, private toastr: ToastrService) {
+		console.log(OfficerLookup.abilities.get("Computer Precision"));
+		console.log(OfficerLookup.abilities.get("Yay, Friends!"));
+	}
 
     @ViewChild('fileImportInput') fileImportInput: any;
 
@@ -82,10 +86,9 @@ export class AppComponent {
 					ship: '',
 					hostile: '',
 					hostileLevel: 0,
-					captainManeuver: '',
-					officerOneAbility: '',
-					officerTwoAbility: '',
-					officerThreeAbility: '',
+					captain: '',
+					officerOne: '',
+					officerTwo: '',
 					totalHull: 0,
 					totalHullDamage: 0,
 					numberOfLogs: 1
@@ -118,10 +121,9 @@ export class AppComponent {
 				const thirdTable = this.parse(fileContent.substring(prevBreak, nextBreak));
 
 				battleSummary.totalHull = thirdTable[0]["Hull Health"];
-				battleSummary.captainManeuver = thirdTable[0]["Captain Maneuver"];
-				battleSummary.officerOneAbility = thirdTable[0]["Officer One Ability"];
-				battleSummary.officerTwoAbility = thirdTable[0]["Officer Two Ability"];
-				battleSummary.officerThreeAbility = thirdTable[0]["Officer Three Ability"];
+				battleSummary.captain = this.findOfficer(thirdTable[0]["Officer One Ability"]);
+				battleSummary.officerOne = this.findOfficer(thirdTable[0]["Officer Two Ability"]);
+				battleSummary.officerTwo = this.findOfficer(thirdTable[0]["Officer Three Ability"]);
 
 				prevBreak = nextBreak + 4;
 				nextBreak = fileContent.indexOf('\r\n\r\n', prevBreak);
@@ -133,6 +135,14 @@ export class AppComponent {
 				observer.complete();
 			}
 		});
+	}
+
+	findOfficer(ability: string): string {
+		let officer = OfficerLookup.abilities.get(ability);
+		if (officer == undefined) {
+			officer = `[A] ${ability}`;
+		}
+		return officer;
 	}
 
 	parse(battlelogTable: string): Array<any> {
@@ -155,7 +165,7 @@ export class AppComponent {
       var hash = 0;
       if (battleSummary) {
         const bs = battleSummary;
-        const composite: string = `${bs.ship}${bs.hostile}${bs.hostileLevel}${bs.captainManeuver}${bs.officerOneAbility}${bs.officerTwoAbility}${bs.officerThreeAbility}`;
+        const composite: string = `${bs.ship}${bs.hostile}${bs.hostileLevel}${bs.captain}${bs.officerOne}${bs.officerTwo}`;
         for (let i = 0; i < composite.length; i++) {
           let chr = composite.charCodeAt(i);
           hash = ((hash << 5) - hash) + chr;
