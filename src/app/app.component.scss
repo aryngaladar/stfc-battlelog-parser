@@ -1,0 +1,43 @@
+.csv-file-chooser-section {
+	padding: 10px;
+	margin-left: 5%;
+	margin-right: 5%;
+	border: 1px solid;
+	text-align: center;
+}
+
+.stfc-result-table {
+	margin: 2em 5% 2em 5%;
+	border: 0px solid #73AD21;
+}
+
+table, th, td {
+	border: 2px solid #2b3139;
+}
+
+
+table {
+	table-layout: fixed;
+	display: flex;
+	flex-direction: row;
+  }
+  table tbody {
+	flex: 1;
+  }
+  table thead, table tbody {
+	display: flex;
+	flex-direction: row;
+  }
+  table thead tr, table tbody tr {
+	display: flex;
+	flex-direction: column;
+	flex: 1;
+  }
+  table thead tr th, table tbody tr th {
+	background: #4b5563;
+	color: #fff;
+  }
+  table thead tr th, table thead tr td, table tbody tr th, table tbody tr td {
+	flex: 1;
+  }
+  
