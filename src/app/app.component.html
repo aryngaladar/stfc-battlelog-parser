@@ -1,52 +1,68 @@
 <h1>STFC Battlelog Parser</h1>
 <div class="csv-file-chooser-section">
-  Add logs:
-  <input type="file" multiple="true" #fileImportInput name="File Upload" id="csvFileUpload" (change)="fileChangeListener($event)"
-    accept=".csv" />
+	Add logs:
+	<input type="file" multiple="true" #fileImportInput name="File Upload" id="csvFileUpload"
+		(change)="fileChangeListener($event)" accept=".csv" />
 </div>
 <div class="stfc-result-table">
 
-  <table>
-    <thead>
-      <tr>
-		<th>Ship</th>
-		<th>Hostile</th>
-		<th>Captain</th>
-		<th>Officer</th>
-		<th>Officer</th>
-	
-		<th>Estimated Kills Possible</th>
-		<th>Number of Logs</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let bSum of battleSummaries;let i = index;">
+	<table>
+		<thead>
+			<tr>
+				<th>Ship:</th>
+				<th>Hostile:</th>
+				<th>Captain:</th>
+				<th>Officer:</th>
+				<th>Officer:</th>
+				<th>Number of Logs:</th>
 
-        <td>
-          <span>{{bSum.ship}}</span>
-        </td>
-        <td>
-          <span>{{bSum.hostile}} {{bSum.hostileLevel}}</span>
-        </td>
-        <td>
-          <span>{{bSum.captain}}</span>
-        </td>
-		<td>
-		  <span>{{bSum.officerOne}}</span>
-		</td>
-		<td>
-		  <span>{{bSum.officerTwo}}</span>
-		</td>
-		<td>
-		  <span *ngIf="bSum.success">{{bSum.totalHull / (bSum.totalHullDamage / bSum.numberOfLogs) | number: '1.0-1'}}</span>
-		  <span *ngIf="!bSum.success">0</span>
-		</td>
-		<td>
-		  <span>{{bSum.numberOfLogs}}</span>
-		</td>
-      </tr>
-    </tbody>
-  </table>
+				<th>Est. Kills Possible:</th>
+				<th>Min Rounds:</th>
+				<th>Avg Rounds:</th>
+				<th>Max Rounds:</th>
+				<th>&nbsp;</th>
+			</tr>
+		</thead>
+		<tbody>
+			<tr *ngFor="let bSum of battleSummaries;let i = index;">
+				<td>
+					<span>{{bSum.ship}}</span>
+				</td>
+				<td>
+					<span>{{bSum.hostile}} {{bSum.hostileLevel}}</span>
+				</td>
+				<td>
+					<span>{{bSum.captain}}</span>
+				</td>
+				<td>
+					<span>{{bSum.officerOne}}</span>
+				</td>
+				<td>
+					<span>{{bSum.officerTwo}}</span>
+				</td>
+				<td>
+					<span>{{bSum.numberOfLogs}}</span>
+				</td>
+				<td>
+					<span *ngIf="bSum.success">{{bSum.totalHull / (bSum.totalHullDamage / bSum.numberOfLogs) | number:
+						'1.0-1'}}</span>
+					<span *ngIf="!bSum.success">0</span>
+				</td>
+				<td>
+					<span>{{bSum.minRounds()}}</span>
+				</td>
+				<td>
+					<span>{{bSum.avgRounds() | number: '1.0-1'}}</span>
+				</td>
+				<td>
+					<span>{{bSum.maxRounds()}}</span>
+				</td>
+				<td class="discard-logs-cell">
+					<span><input type="button" (click)="discardLogs(i)" value="Discard logs" /></span>
+				</td>
+			</tr>
+		</tbody>
+	</table>
 
 </div>
-<input type="button" (click)="discardLogs()" value="Discard logs" style="margin-left: 5%;" />
+<input type="button" (click)="discardAllLogs()" value="Discard all logs" style="margin-left: 5%;" />

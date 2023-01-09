@@ -4,7 +4,7 @@ import { NgxCsvParser } from 'ngx-csv-parser';
 import { NgxCSVParserError } from 'ngx-csv-parser';
 import { Observable, Observer } from 'rxjs';
 import { ParseSummary } from './interfaces/parsing';
-import { BattleSummary } from './interfaces/summary';
+import { BattleSummary } from './interfaces/battle-summary';
 import { ToastrService } from 'ngx-toastr';
 import { OfficerLookup } from './officer-lookup';
 
@@ -14,16 +14,20 @@ import { OfficerLookup } from './officer-lookup';
     styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
+	Math: Math = Math;
 	battleSummaries: BattleSummary[] = [];
 
     constructor(private ngxCsvParser: NgxCsvParser, private toastr: ToastrService) {
-		console.log(OfficerLookup.abilities.get("Computer Precision"));
-		console.log(OfficerLookup.abilities.get("Yay, Friends!"));
+
 	}
 
     @ViewChild('fileImportInput') fileImportInput: any;
 
-	discardLogs(): void {
+	discardLogs(index: number): void {
+		this.battleSummaries.splice(index, 1);
+	}
+
+	discardAllLogs(): void {
 		this.battleSummaries = [];
 	}
 
@@ -52,6 +56,7 @@ export class AppComponent {
 							let existingSummary = this.battleSummaries.find(item => battleSummary.hash == item.hash);
 							if (existingSummary) {
 								existingSummary.totalHullDamage += battleSummary.totalHullDamage;
+								existingSummary.rounds.push(battleSummary.rounds[0]);
 								existingSummary.numberOfLogs++;
 							} else {
 								this.battleSummaries.push(battleSummary);
@@ -82,17 +87,7 @@ export class AppComponent {
 		reader.readAsText(blob, 'utf8');
 		return new Observable((observer: Observer<BattleSummary>) => {
 			reader.onload = () => {
-				const battleSummary: BattleSummary = {
-					ship: '',
-					hostile: '',
-					hostileLevel: 0,
-					captain: '',
-					officerOne: '',
-					officerTwo: '',
-					totalHull: 0,
-					totalHullDamage: 0,
-					numberOfLogs: 1
-				};
+				const battleSummary: BattleSummary = new BattleSummary();
 
 				const fileContent = reader.result as string;
 				let prevBreak = 0;
@@ -128,6 +123,7 @@ export class AppComponent {
 				prevBreak = nextBreak + 4;
 				nextBreak = fileContent.indexOf('\r\n\r\n', prevBreak);
 				const fourthTable = this.parse(fileContent.substring(prevBreak, nextBreak));
+				battleSummary.rounds.push(Number(fourthTable[fourthTable.length-1]["Round"]));
 
 				battleSummary.hash = this.createSummaryHash(battleSummary);
 

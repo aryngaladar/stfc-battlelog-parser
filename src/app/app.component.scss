@@ -12,7 +12,8 @@
 }
 
 table, th, td {
-	border: 2px solid #2b3139;
+	border: 1px solid #4b5563;
+	padding: 3px;
 }
 
 
@@ -20,9 +21,21 @@ table {
 	table-layout: fixed;
 	display: flex;
 	flex-direction: row;
+	width: auto;
   }
   table tbody {
 	flex: 1;
+  }
+  table tbody tr {
+	width: 1em;
+  }
+  table tbody tr td {
+	white-space: nowrap;
+	overflow: hidden;
+  }
+  table tbody tr td.discard-logs-cell {
+	padding-top: 2px;
+	overflow: clip;
   }
   table thead, table tbody {
 	display: flex;
@@ -34,8 +47,9 @@ table {
 	flex: 1;
   }
   table thead tr th, table tbody tr th {
-	background: #4b5563;
-	color: #fff;
+	background: #2b3444;
+	text-align: right;
+	padding-right: 1em;
   }
   table thead tr th, table thead tr td, table tbody tr th, table tbody tr td {
 	flex: 1;
