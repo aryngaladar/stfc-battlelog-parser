@@ -15,11 +15,16 @@
 				<th>Officer:</th>
 				<th>Officer:</th>
 				<th>Number of Logs:</th>
-
+				<th>&nbsp;</th>
 				<th>Est. Kills Possible:</th>
+				<th>&nbsp;</th>
 				<th>Min Rounds:</th>
 				<th>Avg Rounds:</th>
 				<th>Max Rounds:</th>
+				<th>&nbsp;</th>
+				<th>Avg Start Mitigation:</th>
+				<th>Avg Mitigation:</th>
+				<th>Avg End Mitigation:</th>
 				<th>&nbsp;</th>
 			</tr>
 		</thead>
@@ -43,11 +48,13 @@
 				<td>
 					<span>{{bSum.numberOfLogs}}</span>
 				</td>
+				<td></td>
 				<td>
 					<span *ngIf="bSum.success">{{bSum.totalHull / (bSum.totalHullDamage / bSum.numberOfLogs) | number:
 						'1.0-1'}}</span>
 					<span *ngIf="!bSum.success">0</span>
 				</td>
+				<td></td>
 				<td>
 					<span>{{bSum.minRounds()}}</span>
 				</td>
@@ -56,6 +63,16 @@
 				</td>
 				<td>
 					<span>{{bSum.maxRounds()}}</span>
+				</td>
+				<td></td>
+				<td>
+					<span>{{bSum.avg(bSum.startMitigation) | percent: '1.0-1'}}</span>
+				</td>
+				<td>
+					<span>{{bSum.avg(bSum.allMitigation) | percent: '1.0-1'}}</span>
+				</td>
+				<td>
+					<span>{{bSum.avg(bSum.endMitigation) | percent: '1.0-1'}}</span>
 				</td>
 				<td class="discard-logs-cell">
 					<span><input type="button" (click)="discardLogs(i)" value="Discard logs" /></span>

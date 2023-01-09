@@ -11,20 +11,36 @@ export class BattleSummary {
 
     totalHull: number = 0;
     totalHullDamage: number = 0;
-
-	rounds: number[] = [];
-
 	numberOfLogs: number = 1;
+
+	// rounds
+	rounds: number[] = [];
 
 	minRounds(): number {
 		return Math.min(...this.rounds);
 	}
 
 	avgRounds(): number {
-		return (this.rounds.reduce((a, b) => a + b, 0) / this.numberOfLogs);
+		return this.avg(this.rounds);
 	}
 
 	maxRounds(): number {
-		return Math.max(...this.rounds);
+		return Math.max(...this.rounds); 
+	}
+	// --
+
+
+	// ship mitigation
+	startMitigation: number[] = [];
+	endMitigation: number[] = [];
+	allMitigation: number[] = [];
+
+	avgStartMitigation(): number {
+		return this.avg(this.startMitigation);
+	}
+	// --
+
+	avg(array: Array<number>): number {
+		return (array.reduce((a, b) => a + b, 0) / array.length);
 	}
 }

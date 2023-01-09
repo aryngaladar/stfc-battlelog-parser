@@ -97,7 +97,7 @@ export class AppComponent {
 					observer.error("Cannot parse armada logs yet");
 					return;
 				}
-				
+				let playerName = firstTable[0]["Player Name"];
 				let startHull = firstTable[0]["Hull Health"] as number;
 				let endHull = firstTable[0]["Hull Health Remaining"] as number;
 				battleSummary.totalHullDamage = startHull - endHull;
@@ -124,6 +124,13 @@ export class AppComponent {
 				nextBreak = fileContent.indexOf('\r\n\r\n', prevBreak);
 				const fourthTable = this.parse(fileContent.substring(prevBreak, nextBreak));
 				battleSummary.rounds.push(Number(fourthTable[fourthTable.length-1]["Round"]));
+
+				const incomingAttacks = fourthTable.filter(row => row["Type"] == "Attack" && row["Target Name"] == playerName);
+				if (incomingAttacks.length > 0) {
+					battleSummary.allMitigation.push(...incomingAttacks.map((attack) => Number(attack["Mitigated Damage"]) / Number(attack["Total Damage"])));
+					battleSummary.startMitigation.push(battleSummary.allMitigation[0]);
+					battleSummary.endMitigation.push(battleSummary.allMitigation[battleSummary.allMitigation.length-1]);
+				}
 
 				battleSummary.hash = this.createSummaryHash(battleSummary);
 

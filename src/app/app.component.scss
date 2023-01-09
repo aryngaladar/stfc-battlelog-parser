@@ -22,19 +22,15 @@ table {
 	display: flex;
 	flex-direction: row;
 	width: auto;
+	white-space: nowrap;
+	overflow: hidden;
   }
   table tbody {
 	flex: 1;
   }
-  table tbody tr {
-	width: 1em;
-  }
-  table tbody tr td {
-	white-space: nowrap;
-	overflow: hidden;
-  }
+
   table tbody tr td.discard-logs-cell {
-	padding-top: 2px;
+	// padding-top: 2px;
 	overflow: clip;
   }
   table thead, table tbody {
