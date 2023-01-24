@@ -1,5 +1,5 @@
 export class OfficerLookup {
-	static abilities: Map<string, string> = new Map<string, string>([
+	static abilities: Map<string, string|string[]> = new Map<string, string|string[]>([
 		["Computer Precision", "0718"],
 		["Shield Remodulation", "Ahvix"],
 		["Cybernetic Tactician", "Airiam"],
@@ -89,7 +89,7 @@ export class OfficerLookup {
 		["Defensive Tactics", "Linkasa"],
 		["Bolstered", "Livis"],
 		["Klingon Pursue", "L'Nar"],
-		["Quick Thinking", "Lorca? SNW Pike?"],
+		["Quick Thinking", ["Lorca", "SNW Christopher Pike"]],
 		["Fear is Power", "Lursa"],
 		["Isogen Mining", "Mäkinen"],
 		["Wife of a Dahar", "Mara"],

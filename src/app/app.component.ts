@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { ViewChild } from '@angular/core';
 import { NgxCsvParser } from 'ngx-csv-parser';
-import { NgxCSVParserError } from 'ngx-csv-parser';
 import { Observable, Observer } from 'rxjs';
 import { ParseSummary } from './interfaces/parsing';
 import { BattleSummary } from './interfaces/battle-summary';
@@ -116,14 +115,16 @@ export class AppComponent {
 				const thirdTable = this.parse(fileContent.substring(prevBreak, nextBreak));
 
 				battleSummary.totalHull = thirdTable[0]["Hull Health"];
-				battleSummary.captain = this.findOfficer(thirdTable[0]["Officer One Ability"]);
-				battleSummary.officerOne = this.findOfficer(thirdTable[0]["Officer Two Ability"]);
-				battleSummary.officerTwo = this.findOfficer(thirdTable[0]["Officer Three Ability"]);
+
 
 				prevBreak = nextBreak + 4;
 				nextBreak = fileContent.indexOf('\r\n\r\n', prevBreak);
 				const fourthTable = this.parse(fileContent.substring(prevBreak, nextBreak));
 				battleSummary.rounds.push(Number(fourthTable[fourthTable.length-1]["Round"]));
+
+				battleSummary.captain = this.findOfficer(thirdTable[0]["Officer One Ability"], playerName, fourthTable);
+				battleSummary.officerOne = this.findOfficer(thirdTable[0]["Officer Two Ability"], playerName, fourthTable);
+				battleSummary.officerTwo = this.findOfficer(thirdTable[0]["Officer Three Ability"], playerName, fourthTable);
 
 				const incomingAttacks = fourthTable.filter(row => row["Type"] == "Attack" && row["Target Name"] == playerName);
 				if (incomingAttacks.length > 0) {
@@ -140,10 +141,24 @@ export class AppComponent {
 		});
 	}
 
-	findOfficer(ability: string): string {
-		let officer = OfficerLookup.abilities.get(ability);
-		if (officer == undefined) {
-			officer = `[A] ${ability}`;
+	findOfficer(ability: string, playerName: string, roundLog?: any[]): string {
+		const officerLookup = OfficerLookup.abilities.get(ability);
+		let officer: string = `[A] ${ability}`;
+		if (officerLookup != undefined) {
+			if (Array.isArray(officerLookup)) {
+				if (roundLog) {
+					const officersInLog = roundLog
+						.filter(row => row["Type"] == "Officer Ability" && row["Attacker Name"] == playerName && row["Ability Name"] == ability)
+						.map(row => row["Ability Owner Name"] as string);
+					if (officersInLog.length == 1) {
+						officer = `${officersInLog[0]}?`;
+					} else {
+						officer = `${officerLookup.join("? ")}?`;
+					}
+				}
+			} else {
+				officer = officerLookup;
+			}
 		}
 		return officer;
 	}
